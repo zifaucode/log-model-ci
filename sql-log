@@ -1,0 +1,26 @@
+3.Pembuatan table log artikel :
+CREATE TABLE artikel_log (
+ id_log INT(8) AUTO_INCREMENT,
+ id_artikel INT(8),
+ perubahan enum('INSERT', 'UPDATE', 'DELETE'),
+ waktu timestamp,
+ PRIMARY KEY(id_log)
+)
+
+4.Pembuatan Trigger INSERT :
+DELIMITER $$
+CREATE TRIGGER `after_insert_artikel` AFTER INSERT ON `artikel` FOR EACH ROW INSERT INTO artikel_log (id_artikel, perubahan) VALUES (NEW.id_artikel, "INSERT")
+$$
+DELIMITER ;
+
+5.Pembuatan Trigger DELETE :
+DELIMITER $$
+CREATE TRIGGER `after_delete_artikel` AFTER DELETE ON `artikel` FOR EACH ROW INSERT INTO artikel_log (id_artikel, perubahan) VALUES (OLD.id_artikel, "DELETE")
+$$
+DELIMITER ;
+
+6.Pembuatan Trigger UPDATE :
+DELIMITER $$
+CREATE TRIGGER `after_update_artikel` AFTER UPDATE ON `artikel` FOR EACH ROW INSERT INTO artikel_log (id_artikel, perubahan) VALUES (NEW.id_artikel, "UPDATE")
+$$
+DELIMITER ;
